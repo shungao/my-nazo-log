@@ -135,11 +135,11 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
 
         // 【★追加: スマホ幅が200px以下になった場合に画像を縮小させる★】
         // スマホでは幅を100%にし、200pxを超えないように制限します。
-        maxWidth: '100%',
-        boxSizing: 'border-box' as 'border-box',
+        // maxWidth: '100%',
+        // boxSizing: 'border-box' as 'border-box',
         
         // Flexboxの振る舞いを上書きするスタイル
-        flexBasis: '100%', // 【★重要: スマホでは基本的に1行全体を使う★】
+        // flexBasis: '100%', // 【★重要: スマホでは基本的に1行全体を使う★】
         
         // 【★修正: 縦横比 3:2 を適用するコンテナ（外側）★】
         position: 'relative',
