@@ -1,0 +1,181 @@
+// src/components/EventDetail.tsx
+
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { initialEvents } from '../types/event';
+import { type NazoRecord } from '../types/record'; 
+
+interface EventDetailProps {
+  // 【★ 修正: onOpenForm の型に recordIdToEdit を追加 ★】
+  onOpenForm: (eventId: string, recordIdToEdit: string | null) => void; 
+  records: NazoRecord[];
+}
+
+const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
+  const { eventId } = useParams<{ eventId: string }>();
+
+  const event = initialEvents.find(e => e.eventId === eventId);
+  
+  const relatedRecords = records
+    .filter(r => r.eventId === eventId)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    // 【★ 追加: 既存の記録があるか判定し、そのIDを取得 ★】
+  const existingRecord = relatedRecords.length > 0 ? relatedRecords[0] : null;
+  const buttonText = existingRecord ? '記録を編集する' : '参加記録をつける';
+  const buttonColor = existingRecord ? '#f39c12' : '#27ae60'; // 編集はオレンジ、新規は緑
+
+  // スタイル定義
+  const styles: { [key: string]: React.CSSProperties } = { 
+    container: {
+      padding: '30px',
+      border: '1px solid #3498db',
+      borderRadius: '12px',
+      backgroundColor: '#ecf0f1',
+    },
+    backLink: {
+      textDecoration: 'none',
+      color: '#3498db',
+      display: 'block',
+      marginBottom: '20px',
+      fontWeight: 'bold',
+    },
+    h1: {
+      borderBottom: '3px solid #3498db',
+      paddingBottom: '10px',
+      color: '#2c3e50',
+    },
+    infoBlock: {
+      margin: '25px 0',
+      padding: '20px',
+      backgroundColor: 'white',
+      borderRadius: '8px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    },
+    infoLine: {
+      marginBottom: '12px',
+      fontSize: '1.1em',
+    },
+    label: {
+      fontWeight: 'bold', 
+      minWidth: '130px', 
+      display: 'inline-block',
+      color: '#34495e',
+    },
+    buttonArea: {
+      borderTop: '1px dashed #95a5a6',
+      paddingTop: '25px',
+      textAlign: 'center',
+    },
+    actionButton: { 
+      padding: '12px 30px', 
+      fontSize: '18px', 
+      backgroundColor: buttonColor, // 【★ 修正: 色を動的に変更 ★】
+      color: 'white', 
+      border: 'none', 
+      borderRadius: '6px', 
+      cursor: 'pointer',
+      boxShadow: '0 3px 6px rgba(0, 0, 0, 0.2)',
+      transition: 'background-color 0.2s',
+    },
+    recordHeader: {
+      marginTop: '30px',
+      paddingTop: '15px',
+      borderTop: '1px solid #bdc3c7',
+      color: '#34495e',
+    },
+    recordItem: {
+      border: '1px solid #dcdfe3',
+      margin: '10px 0',
+      padding: '15px',
+      borderRadius: '6px',
+      backgroundColor: '#fefefe',
+    },
+    successText: { color: '#2ecc71', fontWeight: 'bold' },
+    failText: { color: '#e74c3c', fontWeight: 'bold' },
+    scoreStar: { color: '#f39c12' },
+  };
+
+  // 公演が見つからない場合
+  if (!event) {
+    return (
+      <div style={{ padding: '20px', border: '1px solid #ffcccc', backgroundColor: '#fff0f0', borderRadius: '5px' }}>
+        <h2>エラー: 公演が見つかりません</h2>
+        <p>指定されたIDを持つ公演は存在しません。（ID: {eventId}）</p>
+        <Link to="/">一覧へ戻る</Link>
+      </div>
+    );
+  }
+
+  // 公演が見つかった場合
+  return (
+    <div style={styles.container}>
+      
+      <Link to="/" style={styles.backLink}>
+        ← 公演一覧へ戻る
+      </Link>
+
+      <h1 style={styles.h1}>
+        {event.name}
+      </h1>
+      
+      <div style={styles.infoBlock}>
+        <p style={styles.infoLine}>
+          <span style={styles.label}>開催団体:</span> 
+          {event.organizer}
+        </p>
+        <p style={styles.infoLine}>
+          <span style={styles.label}>開催場所:</span> 
+          {event.venue}
+        </p>
+        <p style={styles.infoLine}>
+          <span style={styles.label}>所要時間:</span> 
+          {event.duration}
+        </p>
+        <p style={styles.infoLine}>
+          <span style={styles.label}>難易度:</span> 
+          <span style={styles.scoreStar}>
+            {'★'.repeat(event.difficulty) + '☆'.repeat(5 - event.difficulty)}
+          </span> ({event.difficulty}/5)
+        </p>
+      </div>
+      
+      {/* 記録ボタンエリア */}
+      <div style={styles.buttonArea}>
+        {event.isFinished ? (
+          <p style={{ color: '#dc3545', fontWeight: 'bold' }}>この公演は終了しています。</p>
+        ) : (
+          <button 
+            onClick={() => onOpenForm(event.eventId, existingRecord ? existingRecord.id : null)} // 【★ 修正: 既存記録IDを渡す ★】
+            style={{...styles.actionButton, backgroundColor: buttonColor}} // 【★ 修正: 動的な色を適用 ★】
+          >
+            {buttonText} {/* 【★ 修正: ボタンテキストを動的に変更 ★】 */}
+          </button>
+        )}
+      </div>
+
+      <h2 style={styles.recordHeader}>この公演の参加記録 ({relatedRecords.length} 件)</h2>
+      
+      {/* 【★ 修正: 記録は1件のみ表示し、それ以外は無視する ★】 */}
+      {existingRecord ? (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          <li key={existingRecord.id} style={styles.recordItem}>
+            <p style={{ margin: '0 0 5px 0' }}>
+              参加日: {existingRecord.date} / 結果: <strong style={existingRecord.result === '成功' ? styles.successText : styles.failText}>{existingRecord.result}</strong>
+            </p>
+            <p style={{ margin: '5px 0' }}>
+              評価: <span style={styles.scoreStar}>{'★'.repeat(existingRecord.score) + '☆'.repeat(5 - existingRecord.score)}</span>
+            </p>
+            <p style={{ margin: '0' }}>
+              メモ: {existingRecord.memo || '(メモなし)'}
+            </p>
+          </li>
+        </ul>
+      ) : (
+        <p>この公演に関する記録はまだありません。</p>
+      )}
+    </div>
+  );
+};
+
+export default EventDetail;
