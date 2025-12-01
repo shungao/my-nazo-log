@@ -23,6 +23,12 @@ const initialFormData: NewRecord = {
   result: '成功',
   score: 3,
   memo: '',
+  // 【★ 追加 ★】
+  puzzle: 3,
+  experience: 3,
+  quantity: 3,
+  mystery: 3,
+  cheerfulness: 3,
 };
 
 const RecordFormModal: React.FC<RecordFormModalProps> = ({ isOpen, onClose, onSave, targetEventId, events, initialData }) => { 
@@ -40,6 +46,12 @@ const RecordFormModal: React.FC<RecordFormModalProps> = ({ isOpen, onClose, onSa
           score: initialData.score,
           memo: initialData.memo || '',
           eventId: initialData.eventId,
+          // 【★ 編集モード時も新しい5項目をセット ★】
+          puzzle: initialData.puzzle,
+          experience: initialData.experience,
+          quantity: initialData.quantity,
+          mystery: initialData.mystery,
+          cheerfulness: initialData.cheerfulness,
       });
     } else if (targetEventId) {
       // 新規作成モードの場合（イベント指定あり）
@@ -184,6 +196,88 @@ const RecordFormModal: React.FC<RecordFormModalProps> = ({ isOpen, onClose, onSa
               max="5"
               step="1"
               value={formData.score}
+              onChange={handleChange}
+              style={{ width: '100%', marginTop: '5px' }}
+            />
+          </div>
+
+          <h3 style={{ margin: '20px 0 10px 0', fontSize: '1.1em', color: '#555' }}>詳細評価 (1〜5)</h3>
+
+          {/* パズル度 */}
+          <div style={inputGroupStyle}>
+            <label htmlFor="puzzle">パズル度: {formData.puzzle}</label>
+            <input
+              type="range"
+              id="puzzle"
+              name="puzzle"
+              min="1"
+              max="5"
+              step="1"
+              value={formData.puzzle}
+              onChange={handleChange}
+              style={{ width: '100%', marginTop: '5px' }}
+            />
+          </div>
+
+          {/* 体験度 */}
+          <div style={inputGroupStyle}>
+            <label htmlFor="experience">体験度: {formData.experience}</label>
+            <input
+              type="range"
+              id="experience"
+              name="experience"
+              min="1"
+              max="5"
+              step="1"
+              value={formData.experience}
+              onChange={handleChange}
+              style={{ width: '100%', marginTop: '5px' }}
+            />
+          </div>
+
+          {/* 物量 */}
+          <div style={inputGroupStyle}>
+            <label htmlFor="quantity">物量: {formData.quantity}</label>
+            <input
+              type="range"
+              id="quantity"
+              name="quantity"
+              min="1"
+              max="5"
+              step="1"
+              value={formData.quantity}
+              onChange={handleChange}
+              style={{ width: '100%', marginTop: '5px' }}
+            />
+          </div>
+
+          {/* 推理度 */}
+          <div style={inputGroupStyle}>
+            <label htmlFor="mystery">推理度: {formData.mystery}</label>
+            <input
+              type="range"
+              id="mystery"
+              name="mystery"
+              min="1"
+              max="5"
+              step="1"
+              value={formData.mystery}
+              onChange={handleChange}
+              style={{ width: '100%', marginTop: '5px' }}
+            />
+          </div>
+
+          {/* わいわい度 */}
+          <div style={inputGroupStyle}>
+            <label htmlFor="cheerfulness">わいわい度: {formData.cheerfulness}</label>
+            <input
+              type="range"
+              id="cheerfulness"
+              name="cheerfulness"
+              min="1"
+              max="5"
+              step="1"
+              value={formData.cheerfulness}
               onChange={handleChange}
               style={{ width: '100%', marginTop: '5px' }}
             />

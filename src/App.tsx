@@ -76,7 +76,7 @@ function App() {
   return (
     <HashRouter>
       <div className="App" style={{ 
-        maxWidth: '1200px', // 【★ 修正: 最大幅を 1200px に広げます ★】
+        maxWidth: '1600px', // 【★ 修正: 最大幅を 1200px に広げます ★】
         margin: '0 auto', 
         padding: '20px',
         backgroundColor: '#f7f9fc', 
@@ -85,9 +85,9 @@ function App() {
       }}>
         <header style={{ 
           textAlign: 'center', 
-          backgroundColor: '#3498db', 
+          backgroundColor: '#77bb49ff', 
           color: 'white', 
-          padding: '15px 0',
+          padding: '20px 0',
           marginBottom: '30px', 
           borderRadius: '8px', 
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' 
@@ -112,11 +112,11 @@ function App() {
                 width: '200px',
                 flexShrink: 0,
                 // 背景色とパディングを調整して、画像のような浮き出たカード状にする
-                backgroundColor: 'white', 
-                padding: '20px 0', 
+                backgroundColor: '#fff', 
+                padding: '20px 10px', 
                 borderRadius: '8px', 
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', 
-                marginLeft: '20px', // 左端の余白
+                marginLeft: '0px', // 左端の余白
                 marginRight: '20px',
                 height: 'fit-content', // コンテンツの高さに合わせる
                 position: 'sticky', // スクロールしても位置を保持
@@ -125,11 +125,11 @@ function App() {
                 <nav>
                     <ul style={{ listStyle: 'none', padding: 0 }}>
                         <li style={{ marginBottom: '10px' }}>
-                            <Link to="/" style={{ textDecoration: 'none', color: '#333', fontWeight: 'bold' }}>
+                            <Link to="/" style={{ textDecoration: 'none', color: '#444', fontWeight: 'bold' }}>
                                 公演一覧に戻る
                             </Link>
                         </li>
-                        <li style={{ color: '#333', fontWeight: 'bold' }}>
+                        <li style={{ color: '#444', fontWeight: 'bold' }}>
                             自分の記録を見る
                         </li>
                         {/* 将来的に他のナビゲーション要素を追加 */}
@@ -141,7 +141,7 @@ function App() {
             <main style={{ 
                 flexGrow: 1, 
                 // 【★ 修正: スマホ表示では左右のパディングを統一する ★】
-                padding: isMobile ? '0 20px' : '0 20px 0 0',
+                padding: isMobile ? '0 20px' : '0 0 0 0',
             }}>
                 <Routes>
                     <Route 

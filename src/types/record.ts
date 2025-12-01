@@ -9,6 +9,13 @@ export type NazoRecord = {
   result: '成功' | '失敗'; 
   score: number; 
   memo: string; 
+
+  // 【★ 追加する項目 ★】
+  puzzle: number; // パズル度 (1-5)
+  experience: number; // 体験度 (1-5)
+  quantity: number; // 物量 (1-5)
+  mystery: number; // 推理度 (1-5)
+  cheerfulness: number; // わいわい度 (1-5)
 };
 
 // ... (getInitialRecords, saveRecords の import やその他のコードはそのまま)

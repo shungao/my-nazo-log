@@ -4,6 +4,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { initialEvents } from '../types/event';
 import { type NazoRecord } from '../types/record'; 
+import RadarChart from './RadarChart'; // 【★ 追加 ★】
 
 interface EventDetailProps {
   // 【★ 修正: onOpenForm の型に recordIdToEdit を追加 ★】
@@ -24,6 +25,16 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
   const existingRecord = relatedRecords.length > 0 ? relatedRecords[0] : null;
   const buttonText = existingRecord ? '記録を編集する' : '参加記録をつける';
   const buttonColor = existingRecord ? '#f39c12' : '#27ae60'; // 編集はオレンジ、新規は緑
+
+  // 【★ 追加: レーダーチャート用データの平均を算出 ★】
+  // ※現在のロジックでは記録は1件のみのため、ここではその1件のデータをそのまま使います
+  const averageRecordValues = relatedRecords.length > 0 ? {
+    puzzle: relatedRecords[0].puzzle,
+    experience: relatedRecords[0].experience,
+    quantity: relatedRecords[0].quantity,
+    mystery: relatedRecords[0].mystery,
+    cheerfulness: relatedRecords[0].cheerfulness,
+  } : null;
 
   // スタイル定義
   const styles: { [key: string]: React.CSSProperties } = { 
@@ -153,6 +164,24 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
           </button>
         )}
       </div>
+
+      {/* 【★ 追加: レーダーチャート表示エリア ★】 */}
+      <h2 style={styles.recordHeader}>詳細評価</h2>
+      {averageRecordValues ? (
+          <div style={{ 
+              backgroundColor: 'white', 
+              padding: '20px', 
+              borderRadius: '8px', 
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              marginBottom: '30px',
+              textAlign: 'center'
+          }}>
+              <p style={{ fontWeight: 'bold' }}>あなたの詳細評価</p>
+              <RadarChart dataValues={averageRecordValues} label="あなたの評価" />
+          </div>
+      ) : (
+          <p>記録がないため、詳細評価グラフは表示できません。</p>
+      )}
 
       <h2 style={styles.recordHeader}>この公演の参加記録 ({relatedRecords.length} 件)</h2>
       

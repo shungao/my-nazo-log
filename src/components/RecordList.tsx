@@ -78,7 +78,7 @@ const RecordList: React.FC<RecordListProps> = ({ events, onOpenForm }) => {
       padding: '8px 15px', 
       fontSize: '16px', 
       cursor: 'pointer', 
-      backgroundColor: '#3498db', 
+      backgroundColor: '#77bb49ff', 
       color: 'white',
       border: 'none',
       borderRadius: '4px',
