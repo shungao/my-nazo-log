@@ -109,32 +109,47 @@ const RecordList: React.FC<RecordListProps> = ({ events, onOpenForm }) => {
       boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
       transition: 'background-color 0.2s',
     },
-    // 【★ 追加: 画像コンテナのスタイル ★】
     imageContainer: {
-        width: '100px', // 【★修正: 幅を固定 (例: 100px)★】
-        height: '100px', // 【★修正: 高さも固定★】
-        flexShrink: 0, // 縮小しないように設定
-        marginRight: '10px', // 右側に余白
-        backgroundColor: '#eee',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: '100px', // 幅を固定 (例: 100px)
+        flexShrink: 0,
+        marginRight: '10px', 
+        backgroundColor: '#eee', 
+        // display: 'flex',
+        // alignItems: 'center',
+        // justifyContent: 'center',
         overflow: 'hidden',
         borderRadius: '4px',
+        
+        // 【★修正: position の値に as 'relative' を追加★】
+        position: 'relative' as 'relative',
+        paddingTop: '33.33%', // 縦/横 = 2/3 ≈ 66.66% (高さを幅の2/3にする)
+        height: 0, // 高さを padding-top で制御するため 0 に設定
     },
     // 【★追加: テキスト情報全体を囲むコンテナのスタイル★】
     infoContainer: {
         flexGrow: 1, // 残りのスペースを埋める
         minWidth: 0, // Flexアイテムがはみ出さないように設定
     } as React.CSSProperties,
+    // 【★修正: 画像のスタイル★】
     image: {
         width: '100%',
         height: '100%',
-        objectFit: 'cover' as 'cover', // 画像がコンテナを埋めるように調整
+        objectFit: 'cover' as 'cover',
+        // 【★追加: 縦横比が適用されたコンテナ内に画像を配置★】
+        position: 'absolute' as 'absolute',
+        top: 0,
+        left: 0,
     },
+    // 【★修正: プレースホルダーテキストのスタイル★】
     placeholderText: {
         color: '#888',
         fontSize: '14px',
+        // 【★追加: 縦横比が適用されたコンテナ内にテキストを配置★】
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        textAlign: 'center' as 'center',
     },
   };
 

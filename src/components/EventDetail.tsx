@@ -38,12 +38,19 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
 
   // スタイル定義
   const styles: { [key: string]: React.CSSProperties } = { 
+    // 【★修正対象: コンテナのスタイル★】
     container: {
-      padding: '30px',
-      border: '1px solid #3498db',
-      borderRadius: '12px',
-      backgroundColor: '#ecf0f1',
-    },
+      padding: '20px',
+      backgroundColor: '#fff',
+      borderRadius: '8px',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+      
+      // 【★追加: 最大幅を設定し、中央寄せにする★】
+      maxWidth: '900px', // ★この値を変更して最大幅を設定★
+      margin: '0 auto',  // 中央に配置
+      
+      minHeight: '80vh',
+    } as React.CSSProperties,
     backLink: {
       textDecoration: 'none',
       color: '#3498db',
@@ -116,24 +123,37 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
     // 【★修正: 詳細画面の画像コンテナのスタイル★】
     visualContainer: {
         width: '200px', // 幅を固定
-        height: '150px', // 高さを固定
         flexShrink: 0,
         backgroundColor: '#eee', 
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         borderRadius: '8px',
         overflow: 'hidden',
+        
+        // 【★修正: 縦横比 3:2 を適用するコンテナ（外側）★】
+        position: 'relative',
+        paddingTop: '33.33%', // 縦/横 = 2/3 ≈ 66.66%
+        height: 0,
     },
+    // 【★修正: 画像のスタイル★】
     visualImage: {
         width: '100%',
         height: '100%',
         objectFit: 'cover' as 'cover',
+        // 【★追加: 縦横比が適用されたコンテナ内に画像を配置★】
+        position: 'absolute' as 'absolute',
+        top: 0,
+        left: 0,
     },
+    // 【★修正: プレースホルダーテキストのスタイル★】
     placeholderText: {
         color: '#888',
         fontSize: '16px',
         fontWeight: 'bold',
+        // 【★追加: 縦横比が適用されたコンテナ内にテキストを配置★】
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        textAlign: 'center' as 'center',
     },
   };
 
