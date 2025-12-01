@@ -105,6 +105,36 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
     successText: { color: '#2ecc71', fontWeight: 'bold' },
     failText: { color: '#e74c3c', fontWeight: 'bold' },
     scoreStar: { color: '#f39c12' },
+    // 【★追加: メタ情報と画像を囲むFlexコンテナ★】
+    headerFlex: {
+        display: 'flex',
+        gap: '20px',
+        alignItems: 'flex-start',
+        marginBottom: '20px',
+        flexWrap: 'wrap' as 'wrap', // スマホでも崩れないように折り返しを許可
+    } as React.CSSProperties,
+    // 【★修正: 詳細画面の画像コンテナのスタイル★】
+    visualContainer: {
+        width: '200px', // 幅を固定
+        height: '150px', // 高さを固定
+        flexShrink: 0,
+        backgroundColor: '#eee', 
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '8px',
+        overflow: 'hidden',
+    },
+    visualImage: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover' as 'cover',
+    },
+    placeholderText: {
+        color: '#888',
+        fontSize: '16px',
+        fontWeight: 'bold',
+    },
   };
 
   // 公演が見つからない場合
@@ -126,29 +156,43 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
         ← 公演一覧へ戻る
       </Link>
 
-      <h1 style={styles.h1}>
-        {event.name}
-      </h1>
-      
-      <div style={styles.infoBlock}>
-        <p style={styles.infoLine}>
-          <span style={styles.label}>開催団体:</span> 
-          {event.organizer}
-        </p>
-        <p style={styles.infoLine}>
-          <span style={styles.label}>開催場所:</span> 
-          {event.venue}
-        </p>
-        <p style={styles.infoLine}>
-          <span style={styles.label}>所要時間:</span> 
-          {event.duration}
-        </p>
-        <p style={styles.infoLine}>
-          <span style={styles.label}>難易度:</span> 
-          <span style={styles.scoreStar}>
-            {'★'.repeat(event.difficulty) + '☆'.repeat(5 - event.difficulty)}
-          </span> ({event.difficulty}/5)
-        </p>
+      {/* 【★追加: 画像とH1を囲むFlexコンテナ★】 */}
+      <div style={styles.headerFlex}>
+          {/* 1. 画像コンテナ (左側) */}
+          <div style={styles.visualContainer}>
+              {event.keyVisualUrl ? (
+                  <img 
+                      src={event.keyVisualUrl} 
+                      alt={`${event.name} キービジュアル`} 
+                      style={styles.visualImage}
+                      onError={(e) => {
+                      const imgElement = e.target as HTMLImageElement;
+                      imgElement.style.display = 'none'; // 画像を非表示にする
+
+                      // 【★ 修正: nextSibling が存在するかチェックしてから代入を行う ★】
+                      const placeholder = imgElement.nextSibling as HTMLElement | null;
+                      if (placeholder) {
+                          placeholder.textContent = '画像なし';
+                      }
+                  }}
+                  />
+              ) : null}
+              {(!event.keyVisualUrl || event.keyVisualUrl) && ( // URLがないか、読み込み失敗時に表示
+                  <span style={styles.placeholderText}>
+                      キービジュアルなし
+                  </span>
+              )}
+          </div>
+
+          {/* 2. テキスト情報 (右側) */}
+          <div>
+              <h1 style={styles.h1}>{event.name}</h1>
+              <p style={styles.infoText}>団体: {event.organizer} / 会場: {event.venue}</p>
+              <p style={styles.infoText}>所要時間: {event.duration}</p>
+              <h2 style={styles.difficultyHeader}>
+                  難易度: <span style={styles.difficultyStars}>{'★'.repeat(event.difficulty) + '☆'.repeat(5 - event.difficulty)}</span>
+              </h2>
+          </div>
       </div>
       
       {/* 記録ボタンエリア */}

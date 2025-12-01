@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +65,18 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+} */
+
+/* ブラウザのデフォルトマージンを削除 */
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+/* アプリケーション全体が画面サイズいっぱいに広がることを保証 */
+#root {
+  /* width: 100vw; (width: 100% で十分ですが、念のため) */
+  /* height: 100vh; */
+  /* max-width: none !important; (以前のmax-widthを確実に無効化するため) */
+  margin: 0;
 }

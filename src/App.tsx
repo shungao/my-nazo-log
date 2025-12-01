@@ -76,8 +76,6 @@ function App() {
   return (
     <HashRouter>
       <div className="App" style={{ 
-        maxWidth: '1600px', // 【★ 修正: 最大幅を 1200px に広げます ★】
-        margin: '0 auto', 
         padding: '20px',
         backgroundColor: '#f7f9fc', 
         minHeight: '100vh',
@@ -118,8 +116,8 @@ function App() {
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', 
                 marginLeft: '0px', // 左端の余白
                 marginRight: '20px',
-                height: 'fit-content', // コンテンツの高さに合わせる
-                position: 'sticky', // スクロールしても位置を保持
+                height: isMobile ? 'fit-content' : 'calc(100vh - 40px)', // ビューポートの高さ-上下の余白
+                position: 'sticky',
                 top: '20px',
             } as React.CSSProperties}>
                 <nav>
@@ -142,6 +140,8 @@ function App() {
                 flexGrow: 1, 
                 // 【★ 修正: スマホ表示では左右のパディングを統一する ★】
                 padding: isMobile ? '0 20px' : '0 0 0 0',
+                // 【★ 修正: コンテンツの最大幅を適度に設定し、中央に寄せる ★】
+                margin: isMobile ? '0' : '0 auto 0 0', // PCで左寄せにする
             }}>
                 <Routes>
                     <Route 

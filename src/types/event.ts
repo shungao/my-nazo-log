@@ -9,6 +9,7 @@ export type NazoEvent = {
   duration: string;    // 開催期間や所要時間
   difficulty: number;  // 難易度（1〜5）
   isFinished: boolean; // 終了した公演かどうかのフラグ
+  keyVisualUrl?: string; // キービジュアルの画像URL (オプショナル)
 };
 
 // src/types/event.ts (続けて記述)

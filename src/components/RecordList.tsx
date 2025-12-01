@@ -1,10 +1,10 @@
 // src/components/RecordList.tsx
 
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // 【★ useState, useEffect を追加 ★】
 import { Link } from 'react-router-dom';
 import { type NazoEvent } from '../types/event'; 
 // 【★ 追加: カスタムフックのインポート ★】
-import useWindowWidth from '../hooks/useWindowWidth';
+// import useWindowWidth from '../hooks/useWindowWidth';
 
 interface RecordListProps {
   events: NazoEvent[]; 
@@ -13,11 +13,32 @@ interface RecordListProps {
 
 // PC表示に切り替えるブレークポイントを定義 (例: 800px)
 const PC_BREAKPOINT = 800;
+const LARGE_BREAKPOINT = 1200; // 3列になるブレークポイント (追加)
 
 const RecordList: React.FC<RecordListProps> = ({ events, onOpenForm }) => {
-    // 【★ 追加: ウィンドウ幅の判定 ★】
-  const isWideScreen = useWindowWidth(PC_BREAKPOINT);
+  // 【★ 修正: ウィンドウ幅をStateで管理 ★】
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);  
   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); // 初回マウント時のみ実行
+
+  // 画面幅に応じて列数を動的に決定
+  const getColumnCount = (width: number) => {
+    if (width >= LARGE_BREAKPOINT) {
+      return 3; // 1200px以上で3列
+    }
+    if (width >= PC_BREAKPOINT) {
+      return 2; // 800px以上で2列
+    }
+    return 1; // それ未満で1列 (スマホ)
+  };
+
+  const colCount = getColumnCount(windowWidth);
+
   const styles = {
     headerContainer: {
       display: 'flex',
@@ -31,24 +52,27 @@ const RecordList: React.FC<RecordListProps> = ({ events, onOpenForm }) => {
       listStyle: 'none',
       padding: 0,
     // PCの場合にグリッドレイアウトを適用
-      display: isWideScreen ? 'grid' : 'block',
-      gridTemplateColumns: isWideScreen ? '1fr 1fr' : 'none', // 2列設定
-      gap: isWideScreen ? '20px' : '0', // グリッド間の間隔
-    } as React.CSSProperties, // TypeScriptエラー回避のため型アサーション
+      display: 'grid',
+      // 【★ 修正: 列数を動的に設定 ★】
+      gridTemplateColumns: `repeat(${colCount}, 1fr)`, 
+      gap: '20px', 
+    } as React.CSSProperties,
     listItem: {
       border: '1px solid #e0e0e0',
       borderRadius: '4px',
-      margin: isWideScreen ? '0' : '12px 0',
+      margin: colCount > 1 ? '0' : '12px 0', // PC(2列以上)ならマージンなし、スマホ(1列)ならマージンあり
       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
       transition: 'box-shadow 0.2s, transform 0.2s', 
       backgroundColor: 'white',
       height: '100%',
+      padding: 0, // 【★修正: paddingを0にする★】
     },
     link: {
       textDecoration: 'none',
       color: '#333',
-      display: 'block',
-      padding: '15px',
+      display: 'flex', // 【★追加: Flexboxを有効化★】
+      alignItems: 'flex-start', // 上端揃え
+      padding: '10px', // paddingをlistItemからLinkに移す
       height: '100%',
     },
     title: {
@@ -84,7 +108,34 @@ const RecordList: React.FC<RecordListProps> = ({ events, onOpenForm }) => {
       borderRadius: '4px',
       boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
       transition: 'background-color 0.2s',
-    }
+    },
+    // 【★ 追加: 画像コンテナのスタイル ★】
+    imageContainer: {
+        width: '100px', // 【★修正: 幅を固定 (例: 100px)★】
+        height: '100px', // 【★修正: 高さも固定★】
+        flexShrink: 0, // 縮小しないように設定
+        marginRight: '10px', // 右側に余白
+        backgroundColor: '#eee',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        borderRadius: '4px',
+    },
+    // 【★追加: テキスト情報全体を囲むコンテナのスタイル★】
+    infoContainer: {
+        flexGrow: 1, // 残りのスペースを埋める
+        minWidth: 0, // Flexアイテムがはみ出さないように設定
+    } as React.CSSProperties,
+    image: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover' as 'cover', // 画像がコンテナを埋めるように調整
+    },
+    placeholderText: {
+        color: '#888',
+        fontSize: '14px',
+    },
   };
 
   return (
@@ -103,17 +154,43 @@ const RecordList: React.FC<RecordListProps> = ({ events, onOpenForm }) => {
           {events.map(event => (
             <li key={event.eventId} style={styles.listItem}>
               <Link to={`/event/${event.eventId}`} style={styles.link}>
-                <h3 style={styles.title}>{event.name}</h3>
-                <p style={styles.infoText}>
-                  団体: {event.organizer} / 会場: {event.venue}
-                </p>
-                <p style={styles.infoText}>
-                  所要時間: {event.duration} / 
-                  難易度: <span style={styles.difficulty}>{'★'.repeat(event.difficulty) + '☆'.repeat(5 - event.difficulty)}</span>
-                </p>
-                {event.isFinished && (
-                  <strong style={styles.finishedText}>[終了済み]</strong>
-                )}
+                {/* 【★ 追加: 画像表示コンテナ ★】 */}
+                <div style={styles.imageContainer}>
+                    {event.keyVisualUrl ? (
+                        // 画像URLが存在する場合
+                        <img 
+                            src={event.keyVisualUrl} 
+                            alt={`${event.name} キービジュアル`} 
+                            style={styles.image}
+                            // ★エラーハンドリング: 画像が読み込めなかった場合も代替表示に切り替える★
+                            onError={(e) => {
+                            const imgElement = e.target as HTMLImageElement;
+                            imgElement.style.display = 'none'; // 画像を非表示にする
+
+                            // 【★ 修正: nextSibling が存在するかチェックしてから代入を行う ★】
+                            const placeholder = imgElement.nextSibling as HTMLElement | null;
+                            if (placeholder) {
+                                placeholder.textContent = '画像なし';
+                            }
+                        }}
+                        />
+                    ) : null}
+                    {/* 画像URLがない、または読み込み失敗した場合の代替表示 */}
+                    {!event.keyVisualUrl && (
+                        <span style={styles.placeholderText}>
+                            キービジュアルなし
+                        </span>
+                    )}
+                </div>
+                {/* 2. 情報コンテナ (右側) */}
+                <div style={styles.infoContainer}>
+                    <h3 style={styles.title}>{event.name}</h3>
+                    <p style={styles.infoText}>団体: {event.organizer} / 会場: {event.venue}</p>
+                    <p style={styles.infoText}>所要時間: {event.duration} / 難易度: <span style={styles.difficulty}>{'★'.repeat(event.difficulty) + '☆'.repeat(5 - event.difficulty)}</span></p>
+                    {event.isFinished && (
+                        <strong style={styles.finishedText}>[終了済み]</strong>
+                    )}
+                </div>
               </Link>
             </li>
           ))}
