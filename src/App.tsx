@@ -65,6 +65,14 @@ function App() {
     ? records.find(r => r.id === editingRecordId) 
     : undefined;
 
+  // スマホ/PC切り替えのブレークポイント (RecordList.tsxと合わせる)
+  const PC_BREAKPOINT = 800;
+
+  // ウィンドウ幅を取得するカスタムフック useWindowWidth があれば利用します
+  // const isWideScreen = useWindowWidth(PC_BREAKPOINT);
+  // (今回はフックをインポートせずに、静的なスタイルで対応します)
+  const isMobile = window.innerWidth < PC_BREAKPOINT;
+
   return (
     <HashRouter>
       <div className="App" style={{ 
@@ -93,10 +101,14 @@ function App() {
         <div style={{ 
           display: 'flex', 
           paddingTop: '20px', // ヘッダーとの間隔
+          // 【★ 修正: スマホ幅では flex-wrap を使用し縦積み対応 ★】
+          flexWrap: isMobile ? 'wrap' : 'nowrap'
         }}>
             
             {/* 【★ 追加: 左サイドバー ★】 */}
             <aside style={{
+                // 【★ 修正: スマホでは非表示にする ★】
+                display: isMobile ? 'none' : 'block',
                 width: '200px',
                 flexShrink: 0,
                 // 背景色とパディングを調整して、画像のような浮き出たカード状にする
@@ -114,11 +126,11 @@ function App() {
                     <ul style={{ listStyle: 'none', padding: 0 }}>
                         <li style={{ marginBottom: '10px' }}>
                             <Link to="/" style={{ textDecoration: 'none', color: '#333', fontWeight: 'bold' }}>
-                                ● 公演一覧に戻る
+                                公演一覧に戻る
                             </Link>
                         </li>
                         <li style={{ color: '#333', fontWeight: 'bold' }}>
-                            ● 自分の記録を見る
+                            自分の記録を見る
                         </li>
                         {/* 将来的に他のナビゲーション要素を追加 */}
                     </ul>
@@ -128,7 +140,8 @@ function App() {
             {/* 【★ 修正: メインコンテンツエリア ★】 */}
             <main style={{ 
                 flexGrow: 1, 
-                paddingRight: '20px', // 右側のパディング
+                // 【★ 修正: スマホ表示では左右のパディングを統一する ★】
+                padding: isMobile ? '0 20px' : '0 20px 0 0',
             }}>
                 <Routes>
                     <Route 
