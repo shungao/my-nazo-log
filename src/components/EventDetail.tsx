@@ -119,6 +119,11 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
         alignItems: 'flex-start',
         marginBottom: '20px',
         flexWrap: 'wrap' as 'wrap', // スマホでも崩れないように折り返しを許可
+
+        // 【★追加: アイテムがコンテナの幅を超えたら自動で縮小させる設定★】
+        // これはメインコンテンツ全体が画面幅を超えるのを防ぎます
+        overflow: 'hidden',
+        width: '100%',
     } as React.CSSProperties,
     // 【★修正: 詳細画面の画像コンテナのスタイル★】
     visualContainer: {
@@ -127,6 +132,14 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
         backgroundColor: '#eee', 
         borderRadius: '8px',
         overflow: 'hidden',
+
+        // 【★追加: スマホ幅が200px以下になった場合に画像を縮小させる★】
+        // スマホでは幅を100%にし、200pxを超えないように制限します。
+        maxWidth: '100%',
+        boxSizing: 'border-box' as 'border-box',
+        
+        // Flexboxの振る舞いを上書きするスタイル
+        flexBasis: '100%', // 【★重要: スマホでは基本的に1行全体を使う★】
         
         // 【★修正: 縦横比 3:2 を適用するコンテナ（外側）★】
         position: 'relative',
