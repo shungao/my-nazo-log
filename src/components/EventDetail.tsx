@@ -210,7 +210,7 @@ const EventDetail: React.FC<EventDetailProps> = ({ onOpenForm, records }) => {
                   }}
                   />
               ) : null}
-              {(!event.keyVisualUrl || event.keyVisualUrl) && ( // URLがないか、読み込み失敗時に表示
+              {(!event.keyVisualUrl) && ( // URLがないか、読み込み失敗時に表示
                   <span style={styles.placeholderText}>
                       キービジュアルなし
                   </span>

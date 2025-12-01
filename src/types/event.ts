@@ -50,6 +50,7 @@ export const initialEvents: NazoEvent[] = [
     duration: '120分',
     difficulty: 5,
     isFinished: false, // 終了済み
+    keyVisualUrl: 'https://static.escape.id/i/o/tumbleweed/iHeGdy57gC1V7CLq7EHTh9ZwyPuUypFs.png?t=sm'
   },
   {
     eventId: 'E005',
@@ -59,6 +60,7 @@ export const initialEvents: NazoEvent[] = [
     duration: '120分',
     difficulty: 3,
     isFinished: true, // 終了済み
+    keyVisualUrl: 'https://static.escape.id/i/o/tumbleweed/FImDA6ISTzGLV2S52yhaIzoA9Ye1GXQR.png?t=sm',
   },
   {
     eventId: 'E006',
@@ -68,5 +70,6 @@ export const initialEvents: NazoEvent[] = [
     duration: '120分',
     difficulty: 5,
     isFinished: true, // 終了済み
+    keyVisualUrl: 'https://static.escape.id/i/o/xeoxy/pK5HyvNIHziMobOotXDNnAHpohd0ovta.png?t=sm'
   },
 ];
