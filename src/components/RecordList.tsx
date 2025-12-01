@@ -25,7 +25,7 @@ const RecordList: React.FC<RecordListProps> = ({ events, onOpenForm }) => {
       alignItems: 'center',
       marginBottom: '24px', 
       borderBottom: '2px solid #bdc3c7',
-      paddingBottom: '10px',
+      paddingBottom: 'none',
     },
     list: {
       listStyle: 'none',
@@ -37,43 +37,48 @@ const RecordList: React.FC<RecordListProps> = ({ events, onOpenForm }) => {
     } as React.CSSProperties, // TypeScriptエラー回避のため型アサーション
     listItem: {
       border: '1px solid #e0e0e0',
-      borderRadius: '8px',
+      borderRadius: '4px',
       margin: isWideScreen ? '0' : '12px 0',
       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
       transition: 'box-shadow 0.2s, transform 0.2s', 
       backgroundColor: 'white',
+      height: '100%',
     },
     link: {
       textDecoration: 'none',
       color: '#333',
       display: 'block',
       padding: '15px',
+      height: '100%',
     },
     title: {
       margin: '0 0 5px 0', 
       color: '#34495e', 
       fontSize: '1.2em',
       fontWeight: 'bold',
+      borderBottom: '1px solid #f0f0f0', // 画像には見えないが、情報ブロック間に線がある前提
+      paddingBottom: '8px',
     },
     infoText: {
-      margin: '3px 0', 
+      margin: '5px 0', 
       fontSize: '0.9em',
       color: '#7f8c8d' 
     },
     difficulty: {
-      color: '#f39c12'
+      color: '#f39c12',
+      fontSize: '1.2em', // 星を少し大きく
     },
     finishedText: {
       color: '#e74c3c', 
       fontWeight: 'bold',
       fontSize: '0.9em',
-      marginTop: '5px',
+      marginTop: '10px',
     },
     button: {
-      padding: '10px 20px', 
+      padding: '8px 15px', 
       fontSize: '16px', 
       cursor: 'pointer', 
-      backgroundColor: '#2980b9', 
+      backgroundColor: '#3498db', 
       color: 'white',
       border: 'none',
       borderRadius: '4px',

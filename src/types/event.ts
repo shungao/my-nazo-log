@@ -38,6 +38,33 @@ export const initialEvents: NazoEvent[] = [
     organizer: 'タンブルウィード',
     venue: '下北沢',
     duration: '120分',
+    difficulty: 3,
+    isFinished: true, // 終了済み
+  },
+  {
+    eventId: 'E004',
+    name: 'VOID',
+    organizer: 'タンブルウィード',
+    venue: '下北沢',
+    duration: '120分',
+    difficulty: 5,
+    isFinished: false, // 終了済み
+  },
+  {
+    eventId: 'E005',
+    name: '謎まみれ3',
+    organizer: 'タンブルウィード',
+    venue: '下北沢',
+    duration: '120分',
+    difficulty: 3,
+    isFinished: true, // 終了済み
+  },
+  {
+    eventId: 'E006',
+    name: 'ソィ',
+    organizer: 'XEOXY',
+    venue: '西新宿',
+    duration: '120分',
     difficulty: 5,
     isFinished: true, // 終了済み
   },

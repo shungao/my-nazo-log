@@ -1,7 +1,7 @@
 // src/App.tsx
 
 import { useState } from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, Link } from 'react-router-dom';
 import { type NazoRecord } from './types/record';
 import { type NazoEvent, initialEvents } from './types/event'; 
 
@@ -89,20 +89,64 @@ function App() {
           </h1>
         </header>
 
-        <Routes>
-          <Route 
-            path="/" 
-            element={<RecordList events={events} onOpenForm={() => startRecord(null)} />} 
-          /> 
-          
-          <Route 
-            path="/event/:eventId" 
-            element={<EventDetail 
-                      onOpenForm={startRecord} 
-                      records={records} 
-                    />} 
-          />
-        </Routes>
+        {/* メインレイアウトコンテナ */}
+        <div style={{ 
+          display: 'flex', 
+          paddingTop: '20px', // ヘッダーとの間隔
+        }}>
+            
+            {/* 【★ 追加: 左サイドバー ★】 */}
+            <aside style={{
+                width: '200px',
+                flexShrink: 0,
+                // 背景色とパディングを調整して、画像のような浮き出たカード状にする
+                backgroundColor: 'white', 
+                padding: '20px 0', 
+                borderRadius: '8px', 
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', 
+                marginLeft: '20px', // 左端の余白
+                marginRight: '20px',
+                height: 'fit-content', // コンテンツの高さに合わせる
+                position: 'sticky', // スクロールしても位置を保持
+                top: '20px',
+            } as React.CSSProperties}>
+                <nav>
+                    <ul style={{ listStyle: 'none', padding: 0 }}>
+                        <li style={{ marginBottom: '10px' }}>
+                            <Link to="/" style={{ textDecoration: 'none', color: '#333', fontWeight: 'bold' }}>
+                                ● 公演一覧に戻る
+                            </Link>
+                        </li>
+                        <li style={{ color: '#333', fontWeight: 'bold' }}>
+                            ● 自分の記録を見る
+                        </li>
+                        {/* 将来的に他のナビゲーション要素を追加 */}
+                    </ul>
+                </nav>
+            </aside>
+
+            {/* 【★ 修正: メインコンテンツエリア ★】 */}
+            <main style={{ 
+                flexGrow: 1, 
+                paddingRight: '20px', // 右側のパディング
+            }}>
+                <Routes>
+                    <Route 
+                        path="/" 
+                        element={<RecordList events={events} onOpenForm={() => startRecord(null)} />} 
+                    /> 
+                    
+                    <Route 
+                        path="/event/:eventId" 
+                        element={<EventDetail 
+                                onOpenForm={startRecord} 
+                                records={records} 
+                            />} 
+                    />
+                </Routes>
+            </main>
+
+        </div> {/* メインレイアウトコンテナ終了 */}
 
         <RecordFormModal 
           isOpen={isModalOpen} 
